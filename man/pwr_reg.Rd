@@ -4,12 +4,13 @@
 \alias{pwr_reg}
 \title{pwr_reg}
 \usage{
-pwr_reg(x)
+pwr_reg(seeded, counted)
 }
 \arguments{
-\item{x}{data.frame or matrix of dimension n x 2:
-first column contains number of cells seeded,
-second to n-th column contains number of colonies counted}
+\item{seeded}{numeric vector with number of cells seeded}
+
+\item{counted}{numeric vector with number of colonies counted (same length
+as \code{seeded})}
 }
 \value{
 \code{summary.lm} object as returned by \code{\link{summary}}
@@ -19,7 +20,10 @@ second to n-th column contains number of colonies counted}
   cooperativity experiments from Colony Formation Assay (CFA) data
 }
 \examples{
-df.xmpl <- data.frame("seeded" = 10^(seq(1,5,0.5)),
-              "counted" = 0.4*10^(seq(1,5,0.5)+rnorm(n = 9,0,0.1))^1.25)
-pwr_reg(x = df.xmpl)
+pwr_reg(seeded = 10^(seq(1,5,0.5)),
+        counted = 0.4 * (10^seq(1,5,0.5))^1.25 * rnorm(n = 9,1,0.05))
+data(CFAdata)
+D <- subset.data.frame(x = CFAdata,
+                       subset = cell.line==levels(CFAdata$cell.line)[1])
+pwr_reg(seeded = D$`Cells seeded`,counted = D$`0 Gy`)
 }
