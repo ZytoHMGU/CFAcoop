@@ -84,10 +84,10 @@ analyse_survival <- function(RD,
         par_treat = result$"fit"[[i]],
         c_range = c_range
       )
-      Pref<- rmvnorm(n = 10^3,
+      Pref<- mvtnorm::rmvnorm(n = 10^3,
                      mean = result$fit[[1]]$coefficients[,1],
                      sigma = vcov(result$fit[[1]]))
-      Ptreat<- rmvnorm(n = 10^3,
+      Ptreat<- mvtnorm::rmvnorm(n = 10^3,
                        mean = result$fit[[i]]$coefficients[,1],
                        sigma = vcov(result$fit[[i]]))
       result$"uncertainty"[[i - 1]] <- matrix(
@@ -98,7 +98,7 @@ analyse_survival <- function(RD,
           x = calculate_sf(par_ref = Pref,
                            par_treat = Ptreat,
                            c_range = c_range[j]),
-                           probs = c(0.025,0.975))
+          probs = c(0.025,0.975))
       }
     } else {
       warning("warning: SF calculation omitted, range of colonies counted
