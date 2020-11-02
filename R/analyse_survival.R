@@ -48,7 +48,7 @@ analyse_survival <- function(RD,
                              name = "no name",
                              xtreat = NULL,
                              c_range = c(5,100)) {
-  if (!(class(RD) %in% c("data.frame","matrix"))){
+  if (!(class(RD)[1] %in% c("data.frame","matrix"))){
     stop("error: RD must be of class data.frame or matrix")
   }
   result <- list("name" = name)
