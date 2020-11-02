@@ -30,6 +30,8 @@
 #' plot_SF(SF)
 #' @importFrom grDevices "col2rgb" "colorRampPalette" "rgb"
 #' @importFrom graphics "abline" "axis" "par" "plot"
+#' @importFrom Hmisc "errbar"
+#' @importFrom graphics "polygon"
 #' @export
 #'
 plot_SF <- function(SF) {
@@ -48,7 +50,9 @@ plot_SF <- function(SF) {
       mgp = c(1.5, 0.5, 0))
   collect_sf <- data.frame("Exp" = NA,
                            "treat" = NA,
-                           "sf" = NA)
+                           "sf" = NA,
+                           "q1" = NA,
+                           "q2" = NA)
   for (t in seq_along(SF)) {
     CurSF <- SF[[t]]
     N_treat <- length(CurSF$fit)
@@ -101,6 +105,11 @@ plot_SF <- function(SF) {
            max(CurSF$plot[, 2], na.rm = TRUE)
          ))))
     par(new = TRUE)
+    polygon(x = c(x_lim*c(0.8,1.2),rev(x_lim*c(0.8,1.2))),
+            y = log10(c(5,5,100,100)),
+            border = NA,
+            col = rgb(0.9,0.9,0.9,alpha = 0.5,maxColorValue = 1))
+    par(new = TRUE)
     plot(
       x = CurSF$pm[, 1],
       y = CurSF$pm[, 3],
@@ -129,8 +138,10 @@ plot_SF <- function(SF) {
         maxColorValue = 1
       )
     )
-    collect_sf <- rbind(collect_sf, c(t, CurSF$xtreat[1], 1))
+    collect_sf <- rbind(collect_sf, c(t, CurSF$xtreat[1], 1, 1, 1))
     sf_vec <- NULL
+    q1_vec <- NULL
+    q2_vec <- NULL
     x_vec <- NULL
     col_vec <- colhex[1]
     for (i in 2:N_treat) {
@@ -182,13 +193,17 @@ plot_SF <- function(SF) {
         )
       )
       sf_vec <- c(sf_vec, CurSF$SF[[i - 1]])
+      q1_vec <- c(q1_vec, CurSF$uncertainty[[i - 1]][,1])
+      q2_vec <- c(q2_vec, CurSF$uncertainty[[i - 1]][,2])
       x_vec <- c(x_vec, rep(CurSF$xtreat[i], length(CurSF$SF[[i - 1]])))
       col_vec <- c(col_vec, rep(colhex[i], length(CurSF$SF[[i - 1]])))
     }
     keep_sf <-
       data.frame("Exp" = rep(t, length(x_vec)),
                  "treat" = x_vec,
-                 "sf" = sf_vec)
+                 "sf" = sf_vec,
+                 "q1" = q1_vec,
+                 "q2" = q2_vec)
     collect_sf <- rbind(collect_sf, keep_sf)
   }
   collect_sf <- collect_sf[-1, ]
@@ -196,7 +211,7 @@ plot_SF <- function(SF) {
   par(mar = c(2.5, 2.5, 2, 0.5), mgp = c(1.5, 0.5, 0))
   for (sfi in seq_along(SF)) {
     if (SF[[sfi]]$name == "no name") {
-      SF[[sfi]]$name <- paste0("Experiment ", t)
+      SF[[sfi]]$name <- paste0("Experiment ", sfi)
     }
     PD <-
       subset.data.frame(x = collect_sf, subset = (collect_sf$"Exp" == sfi))
@@ -210,5 +225,7 @@ plot_SF <- function(SF) {
       col = col_vec,
       pch = 19
     )
+    with(data = PD,errbar(treat,log10(sf),log10(q1),log10(q2), col = col_vec,
+                          add = TRUE, pch = 1,errbar.col = col_vec))
   }
 }

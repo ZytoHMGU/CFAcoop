@@ -4,7 +4,7 @@
 \alias{analyse_survival}
 \title{analyse_survival}
 \usage{
-analyse_survival(RD, name = "no name", xtreat = NULL)
+analyse_survival(RD, name = "no name", xtreat = NULL, c_range = c(5, 100))
 }
 \arguments{
 \item{RD}{data.frame or matrix containing a table of experiment data}
@@ -13,6 +13,9 @@ analyse_survival(RD, name = "no name", xtreat = NULL)
 
 \item{xtreat}{treatment dose of the colonies counted in the corresponding
 columns of RD}
+
+\item{c_range}{number or vector of numbers of colonies counted for which
+the survival fraction is to be calculated (default = c(5,100))}
 }
 \value{
 list object containing several experiments and treatments organized
@@ -41,6 +44,12 @@ df.2 <- data.frame("seeded" = seeded,
               "counted2" = counted2,
               "counted3" = counted3)
 SF <- vector("list",2)
-SF[[1]] <- analyse_survival(RD = df.1,name = "cell line a",xtreat = c(0,1,4))
-SF[[2]] <- analyse_survival(RD = df.2,name = "cell line b",xtreat = c(0,1,4))
+SF[[1]] <- analyse_survival(RD = df.1,
+                            name = "cell line a",
+                            xtreat = c(0,1,4),
+                            c_range = c(5,100))
+SF[[2]] <- analyse_survival(RD = df.2,
+                            name = "cell line b",
+                            xtreat = c(0,1,4),
+                            c_range = c(5,100))
 }

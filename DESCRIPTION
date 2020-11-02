@@ -4,12 +4,21 @@ Title: Cell Cooperativity Robust Analysis of Colony Formation Assay Data
 Version: 0.1.0
 Author: Daniel Samaga
 Maintainer: Daniel Samaga <daniel.samaga@helmholtz-muenchen.de>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Clonogenic survival is a key characteristic of growing cells. 
+    The colony formation assay (CFA) quantifies the clonogenic potential of 
+    cells after treatment with ionizing radiation or chemical agents.
+        It has been reported, that cell density effects (cooperativity) disturb 
+    the conventionally estimated clonogenic survival (Brix et al., Radiation 
+    Oncology, 2020). A new method to estimate the clonogenic survival more 
+    robustly against cooperativity effects presented in Brix et al. is 
+    implemented in this package.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+Imports: 
+    mvtnorm,
+    Hmisc
 Suggests: 
     knitr,
     rmarkdown,

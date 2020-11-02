@@ -8,6 +8,8 @@
 #' @param name experiment name (e.g. name of cell line)
 #' @param xtreat treatment dose of the colonies counted in the corresponding
 #'   columns of RD
+#' @param c_range number or vector of numbers of colonies counted for which
+#'   the survival fraction is to be calculated (default = c(5,100))
 #'
 #' @return list object containing several experiments and treatments organized
 #'   for convenient plotting
@@ -30,12 +32,22 @@
 #'               "counted2" = counted2,
 #'               "counted3" = counted3)
 #' SF <- vector("list",2)
-#' SF[[1]] <- analyse_survival(RD = df.1,name = "cell line a",xtreat = c(0,1,4))
-#' SF[[2]] <- analyse_survival(RD = df.2,name = "cell line b",xtreat = c(0,1,4))
-#' @importFrom stats "aggregate"
+#' SF[[1]] <- analyse_survival(RD = df.1,
+#'                             name = "cell line a",
+#'                             xtreat = c(0,1,4),
+#'                             c_range = c(5,100))
+#' SF[[2]] <- analyse_survival(RD = df.2,
+#'                             name = "cell line b",
+#'                             xtreat = c(0,1,4),
+#'                             c_range = c(5,100))
+#' @importFrom stats "aggregate" "quantile" "vcov"
+#' @importFrom mvtnorm "rmvnorm"
 #' @export
 #'
-analyse_survival <- function(RD, name = "no name", xtreat = NULL) {
+analyse_survival <- function(RD,
+                             name = "no name",
+                             xtreat = NULL,
+                             c_range = c(5,100)) {
   if (!(class(RD) %in% c("data.frame","matrix"))){
     stop("error: RD must be of class data.frame or matrix")
   }
@@ -58,6 +70,7 @@ analyse_survival <- function(RD, name = "no name", xtreat = NULL) {
     )
   result$"fit" <- vector("list", dim(RD)[2] - 1)
   result$"SF" <- vector("list", dim(RD)[2] - 2)
+  result$"uncertainty" <- vector("list", dim(RD)[2] - 2)
   result$"fit"[[1]] <- pwr_reg(seeded = result$"mean"[, 2],
                                counted = result$"mean"[, 3])
   for (i in seq_along(result$"fit")[-1]) {
@@ -69,16 +82,30 @@ analyse_survival <- function(RD, name = "no name", xtreat = NULL) {
       result$"SF"[[i - 1]] <- calculate_sf(
         par_ref = result$"fit"[[1]],
         par_treat = result$"fit"[[i]],
-        c_range = c(5, 100)
+        c_range = c_range
       )
+      Pref<- rmvnorm(n = 10^3,
+                     mean = result$fit[[1]]$coefficients[,1],
+                     sigma = vcov(result$fit[[1]]))
+      Ptreat<- rmvnorm(n = 10^3,
+                       mean = result$fit[[i]]$coefficients[,1],
+                       sigma = vcov(result$fit[[i]]))
+      result$"uncertainty"[[i - 1]] <- matrix(
+        data = rep(NA,2*length(c_range)),
+        ncol = 2)
+      for (j in seq_along(c_range)){
+        result$"uncertainty"[[i - 1]][j,] <- quantile(
+          x = calculate_sf(par_ref = Pref,
+                           par_treat = Ptreat,
+                           c_range = c_range[j]),
+                           probs = c(0.025,0.975))
+      }
     } else {
       warning("warning: SF calculation omitted, range of colonies counted
               in reference and treated cells do not overlap.")
       result$"SF"[[i - 1]] <- NaN
+      result$"uncertainty"[[i - 1]] <- NaN
     }
-    # Pref<- mvtnorm::rmvnorm(n = 10^4,mean = hhh$fit[[1]]$coefficients[,1],
-    #                         sigma = vcov(hhh$fit[[1]]))
-    # result$SF_uncertainty <- c(calculate_sf())
   }
   return(result)
 }
