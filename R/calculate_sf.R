@@ -33,14 +33,14 @@
 #' @export
 #'
 calculate_sf <- function(par_ref, par_treat, c_range = c(5, 100)) {
-  if (!prod(c(class(par_ref),class(par_treat)) %in% c("summary.lm",
+  if (!prod(c(class(par_ref)[1],class(par_treat)[1]) %in% c("summary.lm",
                                                       "matrix"))){
     stop("error: par_ref and par_treat must be of class summary.lm or matrix")
   }
-  if (class(par_ref) != class(par_treat)) {
+  if (class(par_ref)[1] != class(par_treat)[1]) {
     stop("error: class of par_ref and par_treat must be identical ")
   }
-  if (class(par_ref) == "summary.lm") {
+  if (class(par_ref)[1] == "summary.lm") {
     # calculate survival fraction from two sfit-objects or two pairs c(a,b)
     SF <-
       exp(((log(c_range) - par_ref$coefficients[1, 1]) /
