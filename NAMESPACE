@@ -2,7 +2,7 @@
 
 export(analyse_survival)
 export(calculate_sf)
-export(plot_SF)
+export(plot_sf)
 export(pwr_reg)
 importFrom(Hmisc,"errbar")
 importFrom(grDevices,"col2rgb")

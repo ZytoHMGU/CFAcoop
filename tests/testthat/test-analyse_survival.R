@@ -37,7 +37,7 @@ test_that("output format", {
   expect_equal(class(analyse_survival(RD = D)$SF),"list")
   expect_equal(class(analyse_survival(RD = D)$SF[[1]]),"numeric")
   expect_equal(class(analyse_survival(RD = D)$uncertainty),"list")
-  expect_equal(class(analyse_survival(RD = D)$uncertainty[[1]]),"matrix")
+  expect_equal(class(analyse_survival(RD = D)$uncertainty[[1]])[1],"matrix")
 })
 
 test_that("find c_range", {

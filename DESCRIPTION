@@ -1,17 +1,28 @@
 Package: CFAcoop
 Type: Package
-Title: Cell Cooperativity Robust Analysis of Colony Formation Assay Data
+Title: Colony Formation Assay: Robust Analysis at Cellular Cooperation
 Version: 0.1.0
-Author: Daniel Samaga
+Authors@R: c(
+    person("Daniel", "Samaga", 
+           email = "daniel.samaga@helmholtz-muenchen.de",
+           role = c("cre","aut")),
+    person("Nikko", "Brix", 
+           email = "Nikko.Brix@med.uni-muenchen.de",
+           role = c("aut")),
+    person("Kirsten", "Lauber", 
+           email = "Kirsten.Lauber@med.uni-muenchen.de",
+           role = c("aut")))
 Maintainer: Daniel Samaga <daniel.samaga@helmholtz-muenchen.de>
-Description: Clonogenic survival is a key characteristic of growing cells. 
-    The colony formation assay (CFA) quantifies the clonogenic potential of 
-    cells after treatment with ionizing radiation or chemical agents.
-        It has been reported, that cell density effects (cooperativity) disturb 
-    the conventionally estimated clonogenic survival (Brix et al., Radiation 
-    Oncology, 2020). A new method to estimate the clonogenic survival more 
-    robustly against cooperativity effects presented in Brix et al. is 
-    implemented in this package.
+URL: https://github.com/ZytoHMGU/CFAcoop
+BugReports: https://github.com/ZytoHMGU/CFAcoop/issues
+Description: The CFAcoop package provides functions that enable a robust 
+    analysis of colony formation assay (CFA) data in presence or absence 
+    of cellular cooperation. The implemented method has been described 
+    in Brix et al., Radiat. Oncol., (2020) 
+    "The clonogenic assay: robustness of plating efficiency-based analysis
+    is strongly compromised by cellular cooperation"
+        Power regression for parameter estimation, calculation of survival
+    fractions, uncertainty analysis and plotting functions are provided.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

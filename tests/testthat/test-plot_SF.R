@@ -11,8 +11,8 @@ test_that("input", {
         x = CFAdata,
         subset = (CFAdata$cell.line == levels(CFAdata$cell.line)[i]))[,-1])
   }
-  expect_error(plot_SF(SF = SF.list))
-  expect_error(plot_SF(SF = c()))
+  expect_error(plot_sf(SF = SF.list))
+  expect_error(plot_sf(SF = c()))
 })
 
 test_that("no output", {
@@ -24,5 +24,5 @@ test_that("no output", {
         x = CFAdata,
         subset = (CFAdata$cell.line == levels(CFAdata$cell.line)[i]))[,-1])
   }
-  expect_equal(class(plot_SF(SF = SF.list)),"NULL")
+  expect_equal(class(plot_sf(SF = SF.list)),"NULL")
 })

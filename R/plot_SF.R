@@ -1,40 +1,53 @@
-#' @title  plot_SF
+#' @title  plot_sf
 #'
 #' @description plot cellular cooperativity and clonogenic survival data from
 #' colony formation assay data
 #'
 #' @param SF list build from objects returned by analyse_survival
-#'
+#' @param showUncertainty logical, switches oon/off uncertainty bands of
+#' sf-values.
 #' @return none
 #'
 #' @examples
-#' seeded <- rep(10^(seq(1,5,0.5)),each = 3)
-#' counted1 <- 0.4 * seeded^1.1 * rnorm(n = length(seeded),1,0.05)
-#' counted2 <- 0.2 * seeded^1.125 * rnorm(n = length(seeded),1,0.05)
-#' counted3 <- 0.05 * seeded^1.25 * rnorm(n = length(seeded),1,0.05)
-#' df.1 <- data.frame("seeded" = seeded,
-#'               "counted1" = counted1,
-#'               "counted2" = counted2,
-#'               "counted3" = counted3)
-#' seeded <- rep(10^(seq(1,5,0.5)),each = 3)
-#' counted1 <- 0.5 * seeded^1.01 * rnorm(n = length(seeded),1,0.05)
-#' counted2 <- 0.4 * seeded^1.0125 * rnorm(n = length(seeded),1,0.05)
-#' counted3 <- 0.2 * seeded^1.025 * rnorm(n = length(seeded),1,0.05)
-#' df.2 <- data.frame("seeded" = seeded,
-#'               "counted1" = counted1,
-#'               "counted2" = counted2,
-#'               "counted3" = counted3)
-#' SF <- vector("list",2)
-#' SF[[1]] <- analyse_survival(RD = df.1,name = "cell line a",xtreat = c(0,1,4))
-#' SF[[2]] <- analyse_survival(RD = df.2,name = "cell line b",xtreat = c(0,1,4))
-#' plot_SF(SF)
+#' seeded <- rep(10^(seq(1, 5, 0.5)), each = 3)
+#' df.1 <- data.frame(
+#'   "seeded" = seeded,
+#'   "counted1" = 0.4 * seeded^1.1 * rnorm(n = length(seeded), 1, 0.05),
+#'   "counted2" = 0.2 * seeded^1.125 * rnorm(n = length(seeded), 1, 0.05),
+#'   "counted3" = 0.05 * seeded^1.25 * rnorm(n = length(seeded), 1, 0.05)
+#' )
+#' df.2 <- data.frame(
+#'   "seeded" = seeded,
+#'   "counted1" = 0.5 * seeded^1.01 * rnorm(n = length(seeded), 1, 0.05),
+#'   "counted2" = 0.4 * seeded^1.0125 * rnorm(n = length(seeded), 1, 0.05),
+#'   "counted3" = 0.2 * seeded^1.025 * rnorm(n = length(seeded), 1, 0.05)
+#' )
+#' SF <- vector("list", 2)
+#' SF[[1]] <- analyse_survival(RD = df.1, name = "cell line a",
+#'                             xtreat = c(0, 1, 4))
+#' SF[[2]] <- analyse_survival(RD = df.2, name = "cell line b",
+#'                             xtreat = c(0, 1, 4))
+#' plot_sf(SF)
+#'
+#' data("CFAdata")
+#' SF <- vector("list", 4)
+#' ll <- levels(CFAdata$cell.line)[c(1,3,5,7)]
+#' for (i in seq_along(ll)){
+#'   cdat <- subset.data.frame(x = CFAdata,
+#'                             subset = CFAdata$cell.line==ll[i])
+#'   SF[[i]] <- analyse_survival(RD = cdat[,-1],
+#'                               name = ll[i],
+#'                               xtreat = c(0, 1, 2, 4, 6, 8))
+#' }
+#' plot_sf(SF)
+#'
 #' @importFrom grDevices "col2rgb" "colorRampPalette" "rgb"
 #' @importFrom graphics "abline" "axis" "par" "plot"
 #' @importFrom Hmisc "errbar"
 #' @importFrom graphics "polygon"
 #' @export
 #'
-plot_SF <- function(SF) {
+plot_sf <- function(SF, showUncertainty = TRUE) {
   if (length(SF) > 10) {
     stop(
       "error: more than ten experiments were chosen for plotting.
@@ -46,13 +59,17 @@ plot_SF <- function(SF) {
     )
   }
   par(mfrow = c(2, length(SF)))
-  par(mar = c(2.5, 2.5, 0.5, 0.5),
-      mgp = c(1.5, 0.5, 0))
-  collect_sf <- data.frame("Exp" = NA,
-                           "treat" = NA,
-                           "sf" = NA,
-                           "q1" = NA,
-                           "q2" = NA)
+  par(
+    mar = c(2.5, 2.5, 0.5, 0.5),
+    mgp = c(1.5, 0.5, 0)
+  )
+  collect_sf <- data.frame(
+    "Exp" = NA,
+    "treat" = NA,
+    "sf" = NA,
+    "q1" = NA,
+    "q2" = NA
+  )
   for (t in seq_along(SF)) {
     CurSF <- SF[[t]]
     N_treat <- length(CurSF$fit)
@@ -76,18 +93,18 @@ plot_SF <- function(SF) {
     x_lim <- range(CurSF$plot[with_data, 1])
     y_lim <-
       c(log10(0.1), max(CurSF$plot[, 2:dim(CurSF$plot)[2]], na.rm = TRUE))
-    colhex <- colorRampPalette(c("brown", "red"))(N_treat)
+    colhex <- colorRampPalette(c("#00944000", "#00612A00"))(N_treat) #D23264
     colors <- col2rgb(colhex) / 255
     alpha <- 0.42
     plot(
       x = CurSF$plot[, 1],
       y = CurSF$plot[, 2],
       main = "",
-      #CurSF$name,ann = T,
+      # CurSF$name,ann = T,
       xlim = x_lim,
       ylim = y_lim,
-      pch = '+',
-      yaxt = 'n',
+      pch = "+",
+      yaxt = "n",
       xlab = "cells seeded [log10 #]",
       ylab = "colonies counted",
       col = rgb(
@@ -99,16 +116,20 @@ plot_SF <- function(SF) {
       )
     )
     ytick <- c(-1:floor(max(CurSF$plot[, 2], na.rm = TRUE)))
-    axis(side = 2,
-         at = ytick,
-         labels = c('no cols.', 10 ^ (0:floor(
-           max(CurSF$plot[, 2], na.rm = TRUE)
-         ))))
+    axis(
+      side = 2,
+      at = ytick,
+      labels = c("no cols.", 10^(0:floor(
+        max(CurSF$plot[, 2], na.rm = TRUE)
+      )))
+    )
     par(new = TRUE)
-    polygon(x = c(x_lim*c(0.8,1.2),rev(x_lim*c(0.8,1.2))),
-            y = log10(c(5,5,100,100)),
-            border = NA,
-            col = rgb(0.9,0.9,0.9,alpha = 0.5,maxColorValue = 1))
+    polygon(
+      x = c(x_lim * c(0.8, 1.2), rev(x_lim * c(0.8, 1.2))),
+      y = log10(c(5, 5, 100, 100)),
+      border = NA,
+      col = rgb(0, 148, 64, alpha = 42, maxColorValue = 255)
+    )
     par(new = TRUE)
     plot(
       x = CurSF$pm[, 1],
@@ -151,7 +172,7 @@ plot_SF <- function(SF) {
         y = CurSF$plot[, i + 1],
         xlim = x_lim,
         ylim = y_lim,
-        pch = '+',
+        pch = "+",
         ann = FALSE,
         xaxt = "n",
         yaxt = "n",
@@ -193,17 +214,19 @@ plot_SF <- function(SF) {
         )
       )
       sf_vec <- c(sf_vec, CurSF$SF[[i - 1]])
-      q1_vec <- c(q1_vec, CurSF$uncertainty[[i - 1]][,1])
-      q2_vec <- c(q2_vec, CurSF$uncertainty[[i - 1]][,2])
+      q1_vec <- c(q1_vec, CurSF$uncertainty[[i - 1]][, 1])
+      q2_vec <- c(q2_vec, CurSF$uncertainty[[i - 1]][, 2])
       x_vec <- c(x_vec, rep(CurSF$xtreat[i], length(CurSF$SF[[i - 1]])))
       col_vec <- c(col_vec, rep(colhex[i], length(CurSF$SF[[i - 1]])))
     }
     keep_sf <-
-      data.frame("Exp" = rep(t, length(x_vec)),
-                 "treat" = x_vec,
-                 "sf" = sf_vec,
-                 "q1" = q1_vec,
-                 "q2" = q2_vec)
+      data.frame(
+        "Exp" = rep(t, length(x_vec)),
+        "treat" = x_vec,
+        "sf" = sf_vec,
+        "q1" = q1_vec,
+        "q2" = q2_vec
+      )
     collect_sf <- rbind(collect_sf, keep_sf)
   }
   collect_sf <- collect_sf[-1, ]
@@ -219,13 +242,25 @@ plot_SF <- function(SF) {
       x = PD$treat,
       log10(PD$sf),
       main = SF[[sfi]]$name,
+      col.main = rgb(
+        red = 0, green = 148, blue = 64, alpha = 255,
+        maxColorValue = 255
+      ),
+      col.lab = rgb(
+        red = 0, green = 148, blue = 64, alpha = 255,
+        maxColorValue = 255
+      ),
       xlab = "treatment",
       ylab = "clonogenic survival [ log10(SF) ]",
       ylim = range(log10(collect_sf$sf)),
       col = col_vec,
       pch = 19
     )
-    with(data = PD,errbar(treat,log10(sf),log10(q1),log10(q2), col = col_vec,
-                          add = TRUE, pch = 1,errbar.col = col_vec))
+    if (showUncertainty){
+      with(data = PD, errbar(treat, log10(sf), log10(q1), log10(q2),
+                             col = col_vec,
+                             add = TRUE, pch = 1, errbar.col = col_vec
+      ))
+    }
   }
 }

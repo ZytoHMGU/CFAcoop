@@ -7,23 +7,28 @@
 pwr_reg(seeded, counted)
 }
 \arguments{
-\item{seeded}{numeric vector with number of cells seeded}
+\item{seeded}{numeric vector with number of cells seeded (S)}
 
-\item{counted}{numeric vector with number of colonies counted (same length
+\item{counted}{numeric vector with number of colonies counted (C, same length
 as \code{seeded})}
 }
 \value{
 \code{summary.lm} object as returned by \code{\link{summary}}
 }
 \description{
-\code{pwr_reg} calculates a power regression for cell
-  cooperativity experiments from Colony Formation Assay (CFA) data
+\code{pwr_reg} performs a power regression
+  (log(C) = log(a) + b * log(S) + e)) for clonogenic assay data of
+  experiments examining the cellular cooperativity.
 }
 \examples{
-pwr_reg(seeded = 10^(seq(1,5,0.5)),
-        counted = 0.4 * (10^seq(1,5,0.5))^1.25 * rnorm(n = 9,1,0.05))
+pwr_reg(
+  seeded = 10^(seq(1, 5, 0.5)),
+  counted = 0.4 * (10^seq(1, 5, 0.5))^1.25 * rnorm(n = 9, 1, 0.05)
+)
 data(CFAdata)
-D <- subset.data.frame(x = CFAdata,
-                       subset = cell.line==levels(CFAdata$cell.line)[1])
-pwr_reg(seeded = D$`Cells seeded`,counted = D$`0 Gy`)
+D <- subset.data.frame(
+  x = CFAdata,
+  subset = cell.line == levels(CFAdata$cell.line)[1]
+)
+pwr_reg(seeded = D$`Cells seeded`, counted = D$`0 Gy`)
 }

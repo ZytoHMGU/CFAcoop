@@ -29,16 +29,18 @@ vector of survival fractions.
   cellular cooperativity.
 }
 \examples{
-seeded <- 10^(seq(1,5,0.5))
-counted.ref <- 0.4*10^(seq(1,5,0.5)+rnorm(n = 9,0,0.1))^1.1
-counted.treat <- 0.01*10^(seq(1,5,0.5)+rnorm(n = 9,0,0.1))^1.2
+seeded <- 10^(seq(1, 5, 0.5))
+counted.ref <- 0.4 * 10^(seq(1, 5, 0.5) + rnorm(n = 9, 0, 0.1))^1.1
+counted.treat <- 0.01 * 10^(seq(1, 5, 0.5) + rnorm(n = 9, 0, 0.1))^1.2
 fit_ref <- pwr_reg(seeded = seeded, counted = counted.ref)
 fit_treat <- pwr_reg(seeded = seeded, counted = counted.treat)
 calculate_sf(par_ref = fit_ref, par_treat = fit_treat)
 data("CFAdata")
-D <- subset.data.frame(x = CFAdata,
-                       subset = cell.line==levels(CFAdata$cell.line)[1])
-fit_ref <- pwr_reg(seeded = D$`Cells seeded`,counted = D$`0 Gy`)
-fit_treat <- pwr_reg(seeded = D$`Cells seeded`,counted = D$`4 Gy`)
+D <- subset.data.frame(
+  x = CFAdata,
+  subset = cell.line == levels(CFAdata$cell.line)[1]
+)
+fit_ref <- pwr_reg(seeded = D$`Cells seeded`, counted = D$`0 Gy`)
+fit_treat <- pwr_reg(seeded = D$`Cells seeded`, counted = D$`4 Gy`)
 calculate_sf(par_ref = fit_ref, par_treat = fit_treat)
 }
