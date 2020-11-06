@@ -3,8 +3,8 @@
 #' @description plot cellular cooperativity and clonogenic survival data from
 #' colony formation assay data
 #'
-#' @param SF list build from objects returned by analyse_survival
-#' @param showUncertainty logical, switches oon/off uncertainty bands of
+#' @param SF list build from objects returned by \code{\link{analyse_survival}}
+#' @param showUncertainty logical, switches on/off uncertainty bands for
 #' sf-values.
 #' @return none
 #'

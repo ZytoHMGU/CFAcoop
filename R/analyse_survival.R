@@ -1,36 +1,33 @@
 #' @title  analyse_survival
 #'
-#' @description clonogenic survival data from the colony formation assay is
-#'   processed with respect to cell cooperativity and robust calculation of
-#'   survival fractions
+#' @description wrapper function for robust analysis clonogenic survival data
+#'   from the colony formation assay according to Brix et al. (2020),
+#'   Radiation Oncology.
+#'   Mean values are calculated and used for power regression.
+#'   Resulting coefficients are used for
+#'   calculation of survival fractions and corresponding uncertainty analysis.
 #'
 #' @param RD data.frame or matrix containing a table of experiment data
-#' @param name experiment name (e.g. name of cell line)
-#' @param xtreat treatment dose of the colonies counted in the corresponding
-#'   columns of RD
+#' @param name optional: experiment name (e.g. name of cell line)
+#' @param xtreat optional: treatment dose of the colonies counted in the
+#'   corresponding columns of RD
 #' @param c_range number or vector of numbers of colonies counted for which
 #'   the survival fraction is to be calculated (default = c(5,100))
 #'
 #' @return list object containing several experiments and treatments organized
-#'   for convenient plotting
+#'   for convenient plotting with \code{\link{plot_sf()}}
 #'
 #' @examples
 #' seeded <- rep(10^(seq(1,5,0.5)),each = 3)
-#' counted1 <- 0.4 * seeded^1.1 * rnorm(n = length(seeded),1,0.05)
-#' counted2 <- 0.2 * seeded^1.125 * rnorm(n = length(seeded),1,0.05)
-#' counted3 <- 0.05 * seeded^1.25 * rnorm(n = length(seeded),1,0.05)
-#' df.1 <- data.frame("seeded" = seeded,
-#'               "counted1" = counted1,
-#'               "counted2" = counted2,
-#'               "counted3" = counted3)
-#' seeded <- rep(10^(seq(1,5,0.5)),each = 3)
-#' counted1 <- 0.5 * seeded^1.01 * rnorm(n = length(seeded),1,0.05)
-#' counted2 <- 0.4 * seeded^1.0125 * rnorm(n = length(seeded),1,0.05)
-#' counted3 <- 0.2 * seeded^1.025 * rnorm(n = length(seeded),1,0.05)
+#' df.1 <- data.frame(
+#'   "seeded" = seeded,
+#'   "counted1" = 0.4 * seeded^1.1 * rnorm(n = length(seeded),1,0.05),
+#'   "counted2" = 0.2 * seeded^1.125 * rnorm(n = length(seeded),1,0.05),
+#'   "counted3" = 0.05 * seeded^1.25 * rnorm(n = length(seeded),1,0.05))
 #' df.2 <- data.frame("seeded" = seeded,
-#'               "counted1" = counted1,
-#'               "counted2" = counted2,
-#'               "counted3" = counted3)
+#'   "counted1" = 0.5 * seeded^1.01 * rnorm(n = length(seeded),1,0.05),
+#'   "counted2" = 0.4 * seeded^1.0125 * rnorm(n = length(seeded),1,0.05),
+#'   "counted3" = 0.2 * seeded^1.025 * rnorm(n = length(seeded),1,0.05))
 #' SF <- vector("list",2)
 #' SF[[1]] <- analyse_survival(RD = df.1,
 #'                             name = "cell line a",

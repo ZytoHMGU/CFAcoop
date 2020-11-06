@@ -1,18 +1,18 @@
 #' @title  calculate_sf
 #'
 #' @description \code{calculate_sf} calculates the survival fraction according
-#'   to the procedure presented in Brix et al. (2020) , which is robust against
-#'   cellular cooperativity.
+#'   to the procedure presented in Brix et al. (2020), which is robust against
+#'   cellular cooperation.
 #'
-#' @param par_ref summary.lm object or 2-column matrix for the treatment-free
-#'   reference survival
-#' @param par_treat summary.lm object or 2-column matrix for the clonogenic
-#'   survival after treatment
+#' @param par_ref \code{summary.lm} object or 2-column matrix for the
+#'   treatment-free reference survival
+#' @param par_treat \code{summary.lm} object or 2-column matrix for the
+#'   clonogenic survival after treatment
 #' @param c_range colony numbers for which the survival fraction is calculated
-#' (default = c(5,100))
+#'   (default = c(5,100))
 #'
 #' @return vector of survival fractions.
-#'   If par_ref and par_treat are summary.lm objects,
+#'   If par_ref and par_treat are \code{summary.lm} objects,
 #'   vector is of the same length as c_range.
 #'   If par_ref and par_treat are matrices,
 #'   vector is of the same length as nrow(par_treat)
