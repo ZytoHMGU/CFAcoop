@@ -4,29 +4,29 @@
 \alias{calculate_sf}
 \title{calculate_sf}
 \usage{
-calculate_sf(par_ref, par_treat, c_range = c(5, 100))
+calculate_sf(par_ref, par_treat, c_range = c(5, 20, 100))
 }
 \arguments{
-\item{par_ref}{summary.lm object or 2-column matrix for the treatment-free
-reference survival}
+\item{par_ref}{\code{summary.lm} object or 2-column matrix for the
+treatment-free reference survival}
 
-\item{par_treat}{summary.lm object or 2-column matrix for the clonogenic
-survival after treatment}
+\item{par_treat}{\code{summary.lm} object or 2-column matrix for the
+clonogenic survival after treatment}
 
 \item{c_range}{colony numbers for which the survival fraction is calculated
-(default = c(5,100))}
+(default = c(5, 20, 100))}
 }
 \value{
 vector of survival fractions.
-  If par_ref and par_treat are summary.lm objects,
+  If par_ref and par_treat are \code{summary.lm} objects,
   vector is of the same length as c_range.
   If par_ref and par_treat are matrices,
   vector is of the same length as nrow(par_treat)
 }
 \description{
-\code{calculate_sf} calculates the survival fraction according
-  to the procedure presented in Brix et al. (2020) , which is robust against
-  cellular cooperativity.
+calculates the survival fraction according
+  to the procedure presented in Brix et al. (2020), which is robust against
+  cellular cooperation.
 }
 \examples{
 seeded <- 10^(seq(1, 5, 0.5))

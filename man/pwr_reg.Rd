@@ -9,8 +9,8 @@ pwr_reg(seeded, counted)
 \arguments{
 \item{seeded}{numeric vector with number of cells seeded (S)}
 
-\item{counted}{numeric vector with number of colonies counted (C, same length
-as \code{seeded})}
+\item{counted}{numeric vector with number of colonies counted (C, same
+length as \code{seeded})}
 }
 \value{
 \code{summary.lm} object as returned by \code{\link{summary}}
@@ -18,7 +18,7 @@ as \code{seeded})}
 \description{
 \code{pwr_reg} performs a power regression
   (log(C) = log(a) + b * log(S) + e)) for clonogenic assay data of
-  experiments examining the cellular cooperativity.
+  experiments examining the cellular cooperation.
 }
 \examples{
 pwr_reg(

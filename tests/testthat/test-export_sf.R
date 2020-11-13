@@ -1,6 +1,6 @@
 test_that("input", {
   data("CFAdata")
-  SF.list <- vector("list", 14)
+  SF.list <- vector("list", 7)
   for (i in 1:7) {
     SF.list[[i]] <- analyze_survival(
       RD = subset.data.frame(
@@ -8,21 +8,25 @@ test_that("input", {
         subset = (CFAdata$cell.line == levels(CFAdata$cell.line)[i])
       )[, -1]
     )
-    SF.list[[7 + i]] <- analyze_survival(
-      RD = subset.data.frame(
-        x = CFAdata,
-        subset = (CFAdata$cell.line == levels(CFAdata$cell.line)[i])
-      )[, -1]
-    )
   }
-  expect_error(plot_sf(SF = SF.list))
-  expect_error(plot_sf(SF = c()))
+  expect_error(export_sf(SF = c()))
+  expect_error(export_sf(SF = 42))
+  SF.test <- SF.list[[1]]
+  expect_equal(
+    object = class(export_sf(SF = SF.test)),
+    expected = "data.frame"
+  )
+  SF.test$SF <- NULL
+  expect_error(
+    object = class(export_sf(SF = SF.test)),
+    expected = "data.frame"
+  )
 })
 
-test_that("no output", {
+test_that("ouput", {
   data("CFAdata")
   SF.list <- vector("list", 7)
-  for (i in seq_along(SF.list)) {
+  for (i in 1:7) {
     SF.list[[i]] <- analyze_survival(
       RD = subset.data.frame(
         x = CFAdata,
@@ -30,5 +34,8 @@ test_that("no output", {
       )[, -1]
     )
   }
-  expect_equal(class(plot_sf(SF = SF.list)), "NULL")
+  expect_equal(
+    object = class(export_sf(SF = SF.list)),
+    expected = "data.frame"
+  )
 })

@@ -1,4 +1,4 @@
-#' @title  analyse_survival
+#' @title  analyze_survival
 #'
 #' @description wrapper function for robust analysis clonogenic survival data
 #'   from the colony formation assay according to Brix et al. (2020),
@@ -12,10 +12,10 @@
 #' @param xtreat optional: treatment dose of the colonies counted in the
 #'   corresponding columns of RD
 #' @param c_range number or vector of numbers of colonies counted for which
-#'   the survival fraction is to be calculated (default = c(5,100))
+#'   the survival fraction is to be calculated (default = c(5, 20, 100))
 #'
 #' @return list object containing several experiments and treatments organized
-#'   for convenient plotting with \code{\link{plot_sf()}}
+#'   for convenient plotting with \code{plot_sf}
 #'
 #' @examples
 #' seeded <- rep(10^(seq(1,5,0.5)),each = 3)
@@ -29,22 +29,21 @@
 #'   "counted2" = 0.4 * seeded^1.0125 * rnorm(n = length(seeded),1,0.05),
 #'   "counted3" = 0.2 * seeded^1.025 * rnorm(n = length(seeded),1,0.05))
 #' SF <- vector("list",2)
-#' SF[[1]] <- analyse_survival(RD = df.1,
+#' SF[[1]] <- analyze_survival(RD = df.1,
 #'                             name = "cell line a",
 #'                             xtreat = c(0,1,4),
-#'                             c_range = c(5,100))
-#' SF[[2]] <- analyse_survival(RD = df.2,
+#'                             c_range = c(5,20,100))
+#' SF[[2]] <- analyze_survival(RD = df.2,
 #'                             name = "cell line b",
-#'                             xtreat = c(0,1,4),
-#'                             c_range = c(5,100))
+#'                             xtreat = c(0,1,4))
 #' @importFrom stats "aggregate" "quantile" "vcov"
 #' @importFrom mvtnorm "rmvnorm"
 #' @export
 #'
-analyse_survival <- function(RD,
+analyze_survival <- function(RD,
                              name = "no name",
                              xtreat = NULL,
-                             c_range = c(5,100)) {
+                             c_range = c(5,20,100)) {
   if (!(class(RD)[1] %in% c("data.frame","matrix"))){
     stop("error: RD must be of class data.frame or matrix")
   }
@@ -97,6 +96,8 @@ analyse_survival <- function(RD,
                            c_range = c_range[j]),
           probs = c(0.025,0.975))
       }
+      rownames(result$"uncertainty"[[i - 1]]) <-
+        names(result$"SF"[[i - 1]])
     } else {
       warning("warning: SF calculation omitted, range of colonies counted
               in reference and treated cells do not overlap.")

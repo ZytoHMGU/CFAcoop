@@ -1,6 +1,6 @@
 #' @title  calculate_sf
 #'
-#' @description \code{calculate_sf} calculates the survival fraction according
+#' @description calculates the survival fraction according
 #'   to the procedure presented in Brix et al. (2020), which is robust against
 #'   cellular cooperation.
 #'
@@ -9,7 +9,7 @@
 #' @param par_treat \code{summary.lm} object or 2-column matrix for the
 #'   clonogenic survival after treatment
 #' @param c_range colony numbers for which the survival fraction is calculated
-#'   (default = c(5,100))
+#'   (default = c(5, 20, 100))
 #'
 #' @return vector of survival fractions.
 #'   If par_ref and par_treat are \code{summary.lm} objects,
@@ -34,7 +34,7 @@
 #' calculate_sf(par_ref = fit_ref, par_treat = fit_treat)
 #' @export
 #'
-calculate_sf <- function(par_ref, par_treat, c_range = c(5, 100)) {
+calculate_sf <- function(par_ref, par_treat, c_range = c(5, 20, 100)) {
   if (!prod(c(class(par_ref)[1], class(par_treat)[1]) %in% c(
     "summary.lm",
     "matrix"
@@ -51,6 +51,7 @@ calculate_sf <- function(par_ref, par_treat, c_range = c(5, 100)) {
         par_ref$coefficients[2, 1]) -
         ((log(c_range) - par_treat$coefficients[1, 1]) /
           par_treat$coefficients[2, 1]))
+    names(SF) <- c_range
   } else {
     if (!identical(dim(par_ref), dim(par_treat))) {
       stop("error: par_ref and par_treat must be of identical size")
@@ -61,6 +62,7 @@ calculate_sf <- function(par_ref, par_treat, c_range = c(5, 100)) {
     } else {
       SF <- exp(((log(c_range) - par_ref[1]) / par_ref[2]) -
         ((log(c_range) - par_treat[1]) / par_treat[2]))
+      names(SF) <- c_range
     }
   }
   return(SF)
