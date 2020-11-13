@@ -21,7 +21,7 @@ Description: The CFAcoop package provides functions that enable a robust
     in Brix et al. (2020). (Brix, N., Samaga, D., Hennel, R. et al. 
     "The clonogenic assay: robustness of plating efficiency-based analysis is 
     strongly compromised by cellular cooperation." Radiat Oncol 15, 248 (2020).
-    https://doi.org/10.1186/s13014-020-01697-y)
+    <https://doi.org/10.1186/s13014-020-01697-y>)
         Power regression for parameter estimation, calculation of survival
     fractions, uncertainty analysis and plotting functions are provided.
 License: GPL-3
