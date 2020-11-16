@@ -133,17 +133,21 @@ plot_sf(SF = SF)
 
 Raw data from single replicates is plotted as '$+$'-symbols.
 Corresponding regression lines are calculated using the mean values of 
-replicates of identical number of cells seeded, which are plotted as dots.
-The color indicates the treatment and links the numbers of colonies counted 
+replicates of identical numbers of cells seeded, which are plotted as dots.
+The color indicates the treatment (irradiation with 0 to 8 Gy) 
+and links the numbers of colonies counted 
 from the upper plot to the calculated clonogenic survival in the lower plot. 
 Shaded areas indicate the span from $C = 5$ to $C = 100$, which is 
-the target region of good experimental practice.
+within the target region of good experimental practice.
 Dashed lines show regression lines with a slope of $b=1$ (at $log10(a)$ 
-varying from 0 to 4) for orientation, so that deviation can be spotted easily.  
+varying from 0 to 4) for orientation, so that 
+any substantially non-linear relation (i.e. $b \neq 1$) between the number of 
+colonies counted ($C$) 
+and the number of cells seeded ($S$) can be spotted easily.  
 The dots in the treatment response curves correspond to the survival fractions
-at $C = 5, 20$ an $100$, with error bars indicating the uncertainty bands 
+at $C = 5, 20$ and $100$, with error bars indicating the uncertainty bands 
 calculated as $2.5\%$ and $97.5\%$-percentiles of the parametric bootstrap 
-($N = 1000$) evaluating the covarince matrices of the power regressions.
+($N = 1000$) evaluating the covariance matrices of the power regressions.
 
 All information used for plotting is contained in the objects returned by 
 `` `analyze_survival` ``. 
@@ -275,7 +279,7 @@ cooperative cell lines.
 In short: The plating efficiency frequently is not as constant as it needs to 
 be in order to serve as an adequate normalization factor.
 
-To illustrate this, we compare the PE-based calculated $SF'$ values 
+To illustrate this, we compare the PE-based calculated $SF'$-values 
 with the $SF(C = 20)$-values calculated with the new method for 
 (1) the non-cooperative cell line T47D and 
 (2) the cooperative cell line (BT20).
@@ -309,16 +313,16 @@ Thus, the full set of all combinations is:
 ```{r PEfail1b, fig.width=5, fig.height=4}
 SF_resample <- rep(PE_x, each = length(PE_0)) / rep(PE_0, times = length(PE_x))
 hist(SF_resample, breaks = 25,xlim = c(0.12,0.25),xlab = "(C_4/S_4) / (C_0/S_0)",
-     main = "valid PE-based SF' values")
+     main = "valid PE-based SF'-values")
 ```
 
-Without the assessment of the cellular cooperation, conventional calculation 
-of a $SF'$ value, corresponds to picking randomly a sample from the 
+Without the assessment of cellular cooperation, conventional calculation 
+of an $SF'$-value, corresponds to picking randomly a sample from the 
 distribution shown in the histogram above.
 
 A comparison of the range of this distribution and the calculated uncertainties
-of the new method shows, that for non-cooperative cell lines as T47D, there is 
-no big difference in this variability/uncertainty.
+of the new method shows, that for non-cooperative cell lines such as T47D, there 
+is no big difference in this variability/uncertainty.
 
 ```{r PEfail2}
 range(SF_resample,na.rm = TRUE)
@@ -345,7 +349,7 @@ axis(side = 1,at = c(0,1),labels = c("0 Gy","4 Gy"))
 axis(side = 2,at = seq(0,0.08,0.02),las = 1)
 SF_resample <- rep(PE_x, each = length(PE_0)) / rep(PE_0, times = length(PE_x))
 hist(SF_resample, breaks = 100,xlim = c(0,10),xlab = "(C_4/S_4) / (C_0/S_0)",
-     main = "valid PE-based SF' values")
+     main = "valid PE-based SF'-values")
 ```
 
 The range of the PE-based $SF'$-values does not correspond to the 
@@ -369,8 +373,8 @@ potential due to the treatment (see histogram).
 
 In particular, the average of PE-based $SF'$ calculations does not 
 asymptotically tend to an interpretable value.
-At strong cellular cooperation, the PE-based calculated $SF'$ value is heavily 
-affected by this cellular cooperation and the treatment effect of interest gets
+In case of strong cellular cooperation, the PE-based calculated $SF'$-value is heavily 
+affected by this cellular cooperation and the treatment effect of interest is
 degraded to a side effect: 
 ```{r PEfailCoop2postb}
 cat("    SF'    : ",round(mean(SF_resample,na.rm = TRUE),digits = 3),"\n")
@@ -378,7 +382,7 @@ cat("SEM SF'    : ",round(sd(SF_resample,na.rm = TRUE)/
                             sqrt(length(SF_resample)),digits = 3),"\n")
 ```
 As a consequence, the fraction of cells keeping their clonogenic potential 
-after treatment, is far outside the uncertainty interval of the average 
+after treatment is far outside the uncertainty interval of the average 
 $SF'$-value of the PE-based approach.
 
 ## Conclusion from (1) and (2)
