@@ -29,11 +29,13 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-Imports: 
-    mvtnorm,
-    Hmisc
-Suggests: 
-    knitr,
-    rmarkdown,
-    testthat
+Imports: mvtnorm, Hmisc
+Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2020-11-17 09:53:17 UTC; daniel.samaga
+Author: Daniel Samaga [cre, aut],
+  Nikko Brix [aut],
+  Kirsten Lauber [aut],
+  Horst Zitzelsberger [aut]
+Built: R 3.6.0; ; 2020-11-17 09:53:51 UTC; unix
