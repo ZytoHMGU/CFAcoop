@@ -24,6 +24,6 @@ cll <- levels(CFAdata$cell.line)
 Brix, N., Samaga, D., Hennel, R. et al.
 "The clonogenic assay: robustness of plating efficiency-based analysis is
 strongly compromised by cellular cooperation." Radiat Oncol 15, 248 (2020).
-https://doi.org/10.1186/s13014-020-01697-y
+<doi:10.1186/s13014-020-01697-y>
 }
 \keyword{dataset}

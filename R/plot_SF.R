@@ -65,6 +65,8 @@ plot_sf <- function(SF, showUncertainty = TRUE) {
       "error: empty SF object cannot be plotted."
     )
   }
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   par(mfrow = c(2, length(SF)))
   par(
     mar = c(2.5, 3.5, 0.5, 0.5),
