@@ -1,7 +1,0 @@
-CFAdata                 Colony Formation Assay data on cellular
-                        cooperation
-analyze_survival        analyze_survival
-calculate_sf            calculate_sf
-export_sf               export_sf
-plot_sf                 plot_sf
-pwr_reg                 pwr_reg

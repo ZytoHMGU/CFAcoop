@@ -1,7 +1,0 @@
-name	user	system	elapsed
-CFAdata	0.006	0.001	0.007	
-analyze_survival	0.024	0.001	0.025	
-calculate_sf	0.006	0.001	0.007	
-export_sf	0.096	0.004	0.101	
-plot_sf	0.207	0.004	0.215	
-pwr_reg	0.007	0.002	0.009	
